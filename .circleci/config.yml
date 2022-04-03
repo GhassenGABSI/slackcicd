@@ -96,7 +96,7 @@ workflows:
          cluster-name: eks
          aws-region: $AWS_DEFAULT_REGION
          authenticator-release-tag: v0.5.1
-         aws-profile: terraform
+         aws-profile: $AWS_PROFILE
          docker-image-name: "${AWS_ECR_URL}/test:${CIRCLE_SHA1}"
          version-info: "${CIRCLE_SHA1}"
          requires:
