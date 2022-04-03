@@ -23,6 +23,14 @@ jobs:
         destination: raw-test-output
     - store_test_results:
         path: /tmp/test-results
+  aws-cli-cred-setup:
+    executor: aws-cli/default
+    steps:
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY
+          aws-secret-access-key: AWS_ACCESS_SECRET
+          aws-region: AWS_REGION_NAME
+          aws-profile: AWS_PROFILE
   deploy-application:
     executor: aws-eks/python3
     parameters:
@@ -85,6 +93,7 @@ workflows:
     jobs:
     - test
     # Envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_ECR_ACCOUNT_URL
+    
     - aws-ecr/build-and-push-image:
         repo: test
         tag: "latest,v0.1.${CIRCLE_BUILD_NUM}"
@@ -92,6 +101,10 @@ workflows:
         path: .
         requires:
           - test
+    - aws-cli-cred-setup:
+         requires:
+            - aws-ecr/build-and-push-image
+      
     - deploy-application:
          cluster-name: eks
          aws-region: $AWS_DEFAULT_REGION
@@ -100,4 +113,4 @@ workflows:
          docker-image-name: "${AWS_ECR_URL}/test:${CIRCLE_SHA1}"
          version-info: "${CIRCLE_SHA1}"
          requires:
-            - aws-ecr/build-and-push-image
+            - aws-cli-cred-setup
