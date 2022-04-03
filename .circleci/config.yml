@@ -68,10 +68,15 @@ workflows:
         path: .
         requires:
           - test
+    - aws-eks/create-cluster:
+         cluster-name: eks
+         aws-region: $AWS_DEFAULT_REGION
+         requires:
+           - aws-ecr/build-and-push-image
     - deploy-application:
          cluster-name: eks
          aws-region: $AWS_DEFAULT_REGION
          docker-image-name: "${AWS_ECR_URL}/test:${CIRCLE_SHA1}"
          version-info: "${CIRCLE_SHA1}"
          requires:
-            - aws-ecr/build-and-push-image
+            - aws-eks/create-cluster
