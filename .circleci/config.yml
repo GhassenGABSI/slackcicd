@@ -53,7 +53,7 @@ jobs:
         description: |
           The AWS profile to be used. If not specified, the configured default
           profile for your AWS CLI installation will be used.
-    type: string  
+        type: string  
     steps:
       - checkout
       - run:
