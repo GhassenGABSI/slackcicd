@@ -74,4 +74,4 @@ workflows:
          docker-image-name: "${AWS_ECR_URL}/test:${CIRCLE_SHA1}"
          version-info: "${CIRCLE_SHA1}"
          requires:
-            - build-and-push-image
+            - aws-ecr/build-and-push-image
