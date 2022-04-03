@@ -46,7 +46,7 @@ jobs:
       authenticator-release-tag:
         default: ''
         description: |
-        Specifies which release-tag version of the authenticator to install.
+          Specifies which release-tag version of the authenticator to install.
         type: string
     steps:
       - checkout
