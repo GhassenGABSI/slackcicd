@@ -48,6 +48,12 @@ jobs:
         description: |
           Specifies which release-tag version of the authenticator to install.
         type: string
+      aws-profile:
+        default: ''
+        description: |
+          The AWS profile to be used. If not specified, the configured default
+          profile for your AWS CLI installation will be used.
+    type: string  
     steps:
       - checkout
       - run:
@@ -66,6 +72,7 @@ jobs:
           authenticator-release-tag: << parameters.authenticator-release-tag >>
           install-kubectl: true
           aws-region: << parameters.aws-region >>
+          aws-profile: << parameters.aws-profile >>
       - kubernetes/create-or-update-resource:
           resource-file-path: "deployment/demo-app-deployment.yaml"
           get-rollout-status: true
@@ -89,6 +96,7 @@ workflows:
          cluster-name: eks
          aws-region: $AWS_DEFAULT_REGION
          authenticator-release-tag: v0.5.1
+         aws-profile: terraform
          docker-image-name: "${AWS_ECR_URL}/test:${CIRCLE_SHA1}"
          version-info: "${CIRCLE_SHA1}"
          requires:
